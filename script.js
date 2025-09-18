@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const thankYouMessage = document.getElementById('thank-you-message');
 
     // الصق رابط تطبيق الويب الخاص بك هنا
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwgnZHKIxLR5EEeMsry9c-D_nO5LIfTFbEo7enSGujWUWTqu5bWQcfX0qw5v91mE6g/exec'; 
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySOlau7t9Bk_B4rpfQ-UojZ3R_fw30nhlMofeHN96yv2PV943OYl5WLfG6BHbZQg5A/exec'; 
 
     submitBtn.addEventListener('click', () => {
         const name = visitorNameInput.value.trim();
