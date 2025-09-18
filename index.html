@@ -6,23 +6,39 @@
     <title>تسجيل زوار المهرجان</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main class="container">
-        <div id="registration-form">
-            <img src="logo.png" alt="شعار المهرجان" class="logo"> <h1>أهلاً بك في المهرجان!</h1>
-            <p>فضلاً، قم بتسجيل اسمك للمشاركة في إحصاء عدد الزوار.</p>
-            <input type="text" id="visitor-name" placeholder="أدخل اسمك الكريم" required>
+
+        <section id="registration-form" class="card-glass">
+            <div class="logo-container">
+                <img src="static/logo-right.png" alt="الشعار الأيمن">
+                <img src="static/logo-left.png" alt="الشعار الأيسر">
+            </div>
+            <h1>تسجيل زوار المهرجان</h1>
+            <p class="subtitle">يرجى إدخال الاسم لتسجيل الحضور</p>
+            
+            <input type="text" id="visitor-name" placeholder="أدخل اسمك الكريم هنا" required>
             <button id="submit-btn">تسجيل الحضور</button>
-        </div>
-        <div id="thank-you-message" class="hidden">
-            <h2>✅<br>شكرًا لتسجيلك!</h2>
-            <p>نتمنى لك وقتاً ممتعاً.</p>
-        </div>
+        </section>
+
+        <section id="thank-you-message" class="card-glass hidden">
+            <div class="thank-you-message">
+                <h2>✅</h2>
+                <h2>شكرًا لتسجيلك!</h2>
+                <p>نتمنى لك وقتاً ممتعاً في المهرجان.</p>
+            </div>
+        </section>
+
     </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <footer class="main-footer">
+        <p>&copy; <span id="currentYear"></span> - جميع الحقوق محفوظة - جناح الاتصالات وتقنية المعلومات </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>
