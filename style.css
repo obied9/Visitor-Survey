@@ -267,7 +267,10 @@ h1 {
 /* ==         الفوتر          == */
 /* ============================ */
 footer.main-footer {
+    width: 100%;
     text-align: center;
     padding: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-}
+    color: rgba(255, 255, 255, 0.9); 
+    font-weight: bold; 
+    /* هذا يضمن بقاءه في الأسفل حتى لو كانت الصفحة قصيرة */
+    margin-top: auto; 
