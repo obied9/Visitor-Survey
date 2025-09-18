@@ -274,3 +274,10 @@ footer.main-footer {
     font-weight: bold; 
     /* هذا يضمن بقاءه في الأسفل حتى لو كانت الصفحة قصيرة */
     margin-top: auto; 
+    background-color: #f8f9fa;
+    color: #212529; 
+    font-weight: bold;
+    margin-top: auto;
+    border-top: 1px solid #dddddd; /* أضفنا خطاً علوياً رفيعاً للفصل */
+  }
+  
