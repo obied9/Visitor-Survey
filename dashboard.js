@@ -1,8 +1,8 @@
 // ===============================================================
 // 1. الصق هنا نفس مفاتيح الربط التي استخدمتها في صفحة التسجيل
 // ===============================================================
-const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // الصق هنا Project URL
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY'; // الصق هنا anon public key
+const SUPABASE_URL = 'https://vlbtzwebjfsbniqcsmpj.supabase.co'; // الصق هنا Project URL
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsYnR6d2ViamZzYm5pcWNzbXBqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNzk1MDgsImV4cCI6MjA3Mzc1NTUwOH0.CsU1jqblx93GK8b-Rgla2s2K-4uxtaH7JyPMSjar73M'; // الصق هنا anon public key
 
 // تهيئة Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
