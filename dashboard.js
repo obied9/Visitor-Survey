@@ -1,5 +1,5 @@
 // ===============================================================
-// 1. الصق هنا نفس مفاتيح الربط التي استخدمتها في صفحة التسجيل
+// 1. الإعدادات الأساسية ومفاتيح الربط
 // ===============================================================
 const SUPABASE_URL = 'https://vlbtzwebjfsbniqcsmpj.supabase.co'; // الصق هنا Project URL
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsYnR6d2ViamZzYm5pcWNzbXBqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNzk1MDgsImV4cCI6MjA3Mzc1NTUwOH0.CsU1jqblx93GK8b-Rgla2s2K-4uxtaH7JyPMSjar73M'; // الصق هنا anon public key
@@ -8,52 +8,114 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // استهداف العناصر في صفحة HTML
-const visitorCountElement = document.getElementById('visitor-count');
-const visitorListElement = document.getElementById('visitor-list');
+const totalVisitorsElement = document.getElementById('total-visitors');
+const visitorsTableBody = document.getElementById('visitors-table-body');
+const lastUpdateTimeElement = document.getElementById('lastUpdateTime');
+const currentYearElement = document.getElementById('currentYear');
+const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+let timelineChart; // سيتم تهيئة الرسم البياني لاحقاً
 
 // ===============================================================
-// 2. دالة لجلب وعرض بيانات الزوار
+// 2. الدالة الرئيسية لجلب ومعالجة وعرض البيانات
 // ===============================================================
-async function fetchAndDisplayVisitors() {
+async function loadAndProcessData() {
     try {
-        // اطلب كل البيانات (*) من جدول 'visitors' ورتبهم حسب تاريخ الإنشاء (الأحدث أولاً)
+        // --- جلب البيانات من Supabase ---
         const { data: visitors, error } = await supabase
             .from('visitors')
-            .select('*')
-            .order('created_at', { ascending: false });
+            .select('name, created_at')
+            .order('created_at', { ascending: false }); // الأحدث أولاً
 
-        if (error) {
-            throw error;
+        if (error) throw error;
+
+        // --- تحديث بطاقة إجمالي الزوار ---
+        totalVisitorsElement.textContent = visitors.length;
+
+        // --- تحديث جدول آخر الزوار المسجلين (آخر 5 فقط) ---
+        visitorsTableBody.innerHTML = ''; // مسح الجدول القديم
+        const recentVisitors = visitors.slice(0, 5); // نأخذ أول 5 زوار
+        if (recentVisitors.length === 0) {
+            visitorsTableBody.innerHTML = `<tr><td colspan="2" class="text-center py-4">لا يوجد زوار مسجلون بعد.</td></tr>`;
+        } else {
+            recentVisitors.forEach(visitor => {
+                const registrationTime = new Date(visitor.created_at).toLocaleString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+                const row = `
+                    <tr>
+                        <td>${visitor.name}</td>
+                        <td>${registrationTime}</td>
+                    </tr>
+                `;
+                visitorsTableBody.innerHTML += row;
+            });
         }
 
-        // تحديث إجمالي عدد الزوار
-        visitorCountElement.textContent = visitors.length;
+        // --- معالجة البيانات لإنشاء الرسم البياني (حسب الساعة) ---
+        const visitsByHour = {}; // كائن لتجميع عدد الزوار في كل ساعة
 
-        // مسح أي بيانات قديمة في الجدول
-        visitorListElement.innerHTML = '';
-
-        // المرور على كل زائر في البيانات وإضافته كصف جديد في الجدول
         visitors.forEach(visitor => {
-            const row = document.createElement('tr');
-
-            // تحويل صيغة التاريخ لوقت مقروء
-            const formattedDate = new Date(visitor.created_at).toLocaleString('ar-SA');
-
-            row.innerHTML = `
-                <td>${visitor.name}</td>
-                <td>${formattedDate}</td>
-            `;
-
-            visitorListElement.appendChild(row);
+            const visitHour = new Date(visitor.created_at).getHours(); // نحصل على الساعة (0-23)
+            visitsByHour[visitHour] = (visitsByHour[visitHour] || 0) + 1;
         });
 
+        // إنشاء تسميات للساعات (Labels) وبيانات لكل ساعة
+        const chartLabels = [];
+        const chartData = [];
+        for (let i = 0; i < 24; i++) {
+            // تنسيق الساعة لعرضها بشكل جميل (e.g., "08:00 ص")
+            const hourLabel = new Date(0, 0, 0, i).toLocaleTimeString('ar-SA', { hour: '2-digit', minute:'2-digit', hour12: true });
+            chartLabels.push(hourLabel);
+            chartData.push(visitsByHour[i] || 0); // إذا لم يوجد زوار في ساعة معينة، نضع 0
+        }
+        
+        // --- تحديث الرسم البياني بالبيانات الجديدة ---
+        timelineChart.data.labels = chartLabels;
+        timelineChart.data.datasets[0].data = chartData;
+        timelineChart.update();
+
+        // --- تحديث وقت آخر تحديث ---
+        updateLastUpdateTime();
+
     } catch (error) {
-        console.error('Error fetching data:', error.message);
-        visitorCountElement.textContent = 'خطأ في التحميل';
+        console.error('فشل في تحميل البيانات:', error);
     }
 }
 
 // ===============================================================
-// 3. تشغيل الدالة عند تحميل الصفحة
+// 3. دوال مساعدة وتهيئة الصفحة
 // ===============================================================
-fetchAndDisplayVisitors();
+
+// دالة لتهيئة الرسم البياني لأول مرة
+function initializeChart() {
+    Chart.defaults.color = 'rgba(255, 255, 255, 0.8)';
+    timelineChart = new Chart(timelineCtx, {
+        type: 'line',
+        data: { labels: [], datasets: [{
+            label: 'عدد الزوار',
+            data: [],
+            borderColor: '#36A2EB',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            fill: true,
+            tension: 0.4
+        }]},
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        }
+    });
+}
+
+// دالة لتحديث وقت "آخر تحديث"
+function updateLastUpdateTime() {
+    const now = new Date();
+    lastUpdateTimeElement.textContent = now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+// ===============================================================
+// 4. تشغيل كل شيء عند تحميل الصفحة
+// ===============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    initializeChart();      // 1. جهز الرسم البياني الفارغ
+    loadAndProcessData();   // 2. املأه بالبيانات لأول مرة
+    setInterval(loadAndProcessData, 30000); // 3. قم بتحديث البيانات كل 30 ثانية
+    currentYearElement.textContent = new Date().getFullYear(); // تحديث سنة الحقوق
+});
