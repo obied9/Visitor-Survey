@@ -1,4 +1,4 @@
-/* ============================ */
+/* /* ============================ */
 /* ==      الأنماط العامة     == */
 /* ============================ */
 :root {
@@ -25,8 +25,8 @@ html, body {
 }
 
 body {
-    background-image: url('background.jpg'); /* تأكد من وضع صورة خلفية مناسبة بهذا المسار */
-    background-size: 100% 100% ;
+    background-image: url('static/background.jpeg'); /* تأكد من وضع صورة خلفية مناسبة بهذا المسار */
+    background-size: cover;
     background-position: center;
     background-attachment: fixed;
     color: var(--text-color);
@@ -58,6 +58,11 @@ main.container {
     text-align: center;
     width: 100%;
     max-width: 450px;
+    
+    /* -- تحسين التوسيط للجوال -- */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .logo-container {
@@ -102,6 +107,10 @@ h1 {
 /* ============================ */
 /* ==    بطاقة الزائر المُنشأة    == */
 /* ============================ */
+#card-display-section {
+    justify-content: center; /* توسيط المحتوى عمودياً داخل البطاقة */
+}
+
 .id-card-container {
     width: 320px;
     height: 480px;
@@ -146,7 +155,6 @@ h1 {
     flex: 1;
     object-fit: contain;
 }
-/* --- نهاية تعديلات رأس البطاقة --- */
 
 .id-card-body {
     flex-grow: 1;
@@ -270,14 +278,9 @@ footer.main-footer {
     width: 100%;
     text-align: center;
     padding: 1rem;
-    color: rgba(255, 255, 255, 0.9); 
-    font-weight: bold; 
-    /* هذا يضمن بقاءه في الأسفل حتى لو كانت الصفحة قصيرة */
-    margin-top: auto; 
     background-color: #f8f9fa;
-    color: #212529; 
+    color: #212529;
     font-weight: bold;
     margin-top: auto;
-    border-top: 1px solid #dddddd; /* أضفنا خطاً علوياً رفيعاً للفصل */
-  }
-  
+    border-top: 1px solid #dddddd;
+} */
