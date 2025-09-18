@@ -209,11 +209,27 @@ footer.main-footer {
 }
 
 .download-btn {
-    margin-top: 0;
+    /* --- الإضافات والتعديلات --- */
+    display: inline-block; /* لضمان تطبيق الأبعاد بشكل صحيح */
+    text-decoration: none !important; /* لإزالة الخط تحت النص بشكل إجباري */
+    text-align: center; /* للتأكد من توسط النص */
+    
+    /* --- التنسيقات السابقة (تبقى كما هي) --- */
+    flex-grow: 1; /* لجعل الزرين بنفس العرض */
+    padding: 12px; /* تعديل الحجم ليكون أنسب */
+    border: none;
+    border-radius: 10px;
     background: #17a2b8;
+    color: white !important; /* للتأكيد على لون النص */
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
 .download-btn:hover {
     background: #138496;
+    transform: translateY(-3px);
     box-shadow: 0 4px 20px rgba(23, 162, 184, 0.5);
 }
 
@@ -226,4 +242,9 @@ footer.main-footer {
     text-decoration: underline;
     margin-top: 1rem;
     font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.link-btn:hover {
+    opacity: 1;
 }
