@@ -4,8 +4,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const registrationForm = document.getElementById('registration-form');
     const thankYouMessage = document.getElementById('thank-you-message');
 
-    // الصق رابط تطبيق الويب الخاص بك هنا
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySOlau7t9Bk_B4rpfQ-UojZ3R_fw30nhlMofeHN96yv2PV943OYl5WLfG6BHbZQg5A/exec'; 
+    // ===============================================================
+    // 1. الصق هنا مفاتيح الربط التي نسختها من Supabase
+    // ===============================================================
+    const SUPABASE_URL = 'https://vlbtzwebjfsbniqcsmpj.supabase.co'; // الصق هنا Project URL
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsYnR6d2ViamZzYm5pcWNzbXBqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNzk1MDgsImV4cCI6MjA3Mzc1NTUwOH0.CsU1jqblx93GK8b-Rgla2s2K-4uxtaH7JyPMSjar73M'; // الصق هنا anon public key
+
+    // تهيئة Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ===============================================================
+    // 2. هذه هي الدالة الجديدة التي ترسل البيانات إلى Supabase
+    // ===============================================================
+    async function addVisitor(name) {
+        try {
+            // استخدم دالة insert() من مكتبة Supabase لإضافة صف جديد
+            const { data, error } = await supabase
+                .from('visitors') // اسم الجدول الذي أنشأته
+                .insert([
+                    { name: name }, // البيانات التي تريد إضافتها
+                ]);
+
+            if (error) {
+                // إذا حدث خطأ من Supabase، اعرضه في الـ console
+                throw error;
+            }
+
+            // إذا نجحت العملية
+            registrationForm.classList.add('hidden');
+            thankYouMessage.classList.remove('hidden');
+
+        } catch (error) {
+            console.error('Error:', error.message);
+            alert('عفواً، حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.');
+            // إعادة تفعيل الزر في حالة حدوث خطأ
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'تسجيل الحضور';
+        }
+    }
+
 
     submitBtn.addEventListener('click', () => {
         const name = visitorNameInput.value.trim();
@@ -14,31 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // تعطيل الزر لمنع الإرسال المتكرر
         submitBtn.disabled = true;
         submitBtn.textContent = 'جاري التسجيل...';
 
-        // إرسال البيانات إلى Google Sheet
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // ضروري لتجنب مشاكل CORS مع Apps Script
-            cache: 'no-cache',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: name }),
-        })
-        .then(() => {
-            // إخفاء نموذج التسجيل وإظهار رسالة الشكر
-            registrationForm.classList.add('hidden');
-            thankYouMessage.classList.remove('hidden');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('عفواً، حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.');
-            // إعادة تفعيل الزر في حالة حدوث خطأ
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'تسجيل الحضور';
-        });
+        // استدعاء الدالة الجديدة
+        addVisitor(name);
     });
 });
