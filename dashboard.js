@@ -33,7 +33,7 @@ async function loadAndProcessData() {
 
         // --- تحديث جدول آخر الزوار المسجلين (آخر 5 فقط) ---
         visitorsTableBody.innerHTML = ''; // مسح الجدول القديم
-        const recentVisitors = visitors.slice(0, 10); // نأخذ أول 5 زوار
+        const recentVisitors = visitors.slice(0, 5); // نأخذ أول 5 زوار
         if (recentVisitors.length === 0) {
             visitorsTableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4">لا يوجد زوار مسجلون بعد.</td></tr>`;
         } else {
