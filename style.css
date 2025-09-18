@@ -1,71 +1,125 @@
-body {
-    font-family: 'Cairo', sans-serif;
-    background-color: #f0f2f5;
+:root {
+    --primary-color: #007bff;
+    --glass-bg: rgba(0, 0, 0, 0.4);
+    --border-color: rgba(255, 255, 255, 0.2);
+    --text-color: #ffffff;
+    --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     display: flex;
+    flex-direction: column;
+    font-family: 'Tajawal', sans-serif;
+}
+
+body {
+    background-image: url('background.jpeg'); /* تأكد من وضع صورة خلفية مناسبة بهذا المسار */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--text-color);
+}
+
+main.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.container {
-    background-color: white;
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-    transition: all 0.3s ease-in-out;
 }
 
-.logo {
-    width: 100px;
-    margin-bottom: 1rem;
+.card-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    padding: 2.5rem;
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
 }
 
 h1 {
-    color: #333;
+    font-weight: 800;
     margin-bottom: 0.5rem;
 }
 
-p {
-    color: #666;
-    margin-bottom: 1.5rem;
+.subtitle {
+    opacity: 0.8;
+    margin-bottom: 2rem;
 }
 
 #visitor-name {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box; /* To include padding in the width */
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
     font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+#visitor-name::placeholder {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 #submit-btn {
     width: 100%;
-    padding: 12px;
-    background: linear-gradient(90deg, #56ab2f, #a8e063);
-    color: white;
+    padding: 15px;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: 10px;
+    background: linear-gradient(45deg, var(--primary-color), #00c6ff);
+    color: white;
     font-size: 1.1rem;
-    font-weight: bold;
-    transition: transform 0.2s;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 #submit-btn:hover {
-    transform: scale(1.02);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.5);
 }
 
 #submit-btn:disabled {
-    background: #ccc;
+    background: #555;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .hidden {
     display: none;
+}
+
+.thank-you-message h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+footer.main-footer {
+    text-align: center;
+    padding: 1rem;
+    color: rgba(255, 255, 255, 0.8);
 }
