@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل زوار المهرجان</title>
+    <title>تسجيل وإنشاء دعوة زائر</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <main class="container">
@@ -18,24 +22,41 @@
                 <img src="logo-left.png" alt="الشعار الأيسر">
             </div>
             <h1>تسجيل زوار المهرجان</h1>
-            <p class="subtitle">يرجى إدخال الاسم لتسجيل الحضور</p>
+            <p class="subtitle">يرجى إدخال الاسم لإنشاء بطاقة الدخول</p>
             
-            <input type="text" id="visitor-name" placeholder="أدخل اسمك الكريم هنا" required>
-            <button id="submit-btn">تسجيل الحضور</button>
+            <input type="text" id="visitor-name" placeholder="أدخل اسمك " required>
+            <button id="submit-btn">إنشاء البطاقة</button>
         </section>
 
-        <section id="thank-you-message" class="card-glass hidden">
-            <div class="thank-you-message">
-                <h2>✅</h2>
-                <h2>شكرًا لتسجيلك!</h2>
-                <p>نتمنى لك وقتاً ممتعاً في المهرجان.</p>
+        <section id="card-display-section" class="card-glass hidden">
+            <h2>تم إنشاء البطاقة بنجاح!</h2>
+            
+            <div id="visitorIdCard" class="id-card-container">
+                <div class="id-card-header">
+                    <h3>دعوة دخول</h3>
+                    <img src="logo-left.png" alt="شعار الجهة" class="id-card-logo">
+                </div>
+                <div class="id-card-body">
+                    <p id="visitorNameDisplay" class="visitor-name-text"></p>
+                    <p class="unique-id-label">المعرف الفريد للدعوة</p>
+                    <strong id="cardUniqueId" class="unique-id-text"></strong>
+                </div>
+                <div class="id-card-footer">
+                    <canvas id="cardQrCanvas"></canvas>
+                </div>
             </div>
+
+            <div class="download-buttons">
+                <button id="downloadPngBtn" class="download-btn">تحميل كصورة (PNG)</button>
+                <button id="downloadPdfBtn" class="download-btn">تحميل كملف (PDF)</button>
+            </div>
+            <button id="createNewCardBtn" class="link-btn">تسجيل زائر آخر</button>
         </section>
 
     </main>
 
     <footer class="main-footer">
-        <p>&copy; <span id="currentYear"></span> - جميع الحقوق محفوظة - جناح الاتصالات وتقنية المعلومات </p>
+        <p>&copy; <span id="currentYear"></span> - جميع الحقوق محفوظة</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
