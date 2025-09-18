@@ -39,14 +39,14 @@ async function addVisitorAndCreateCard(name) {
         
         // --- استخراج المعرف الفريد (UUID) من البيانات العائدة ---
         const newVisitor = data[0];
-        const uniqueId = newVisitor.id;
+        const formattedId = "vs" + newVisitor.ticket_id;
 
         // --- عرض البيانات في البطاقة ---
         visitorNameDisplayElement.textContent = newVisitor.name;
-        cardUniqueIdElement.textContent = uniqueId;
+        cardUniqueIdElement.textContent = formattedId;
 
         // --- إنشاء QR Code باستخدام المعرف الفريد ---
-        await QRCode.toCanvas(qrCanvas, uniqueId, { width: 180 });
+        await QRCode.toCanvas(qrCanvas, formattedId, { width: 180 });
 
         // --- إظهار البطاقة وإخفاء نموذج التسجيل ---
         registrationForm.classList.add('hidden');
