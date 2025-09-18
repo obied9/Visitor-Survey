@@ -38,15 +38,18 @@ async function loadAndProcessData() {
             visitorsTableBody.innerHTML = `<tr><td colspan="3" class="text-center py-4">لا يوجد زوار مسجلون بعد.</td></tr>`;
         } else {
             recentVisitors.forEach(visitor => {
+                
+                // ## السطر التالي كان مفقوداً وتمت إضافته لتصحيح الخطأ ##
+                const formattedId = visitor.ticket_id ? "vs" + visitor.ticket_id : "---";
+                
                 const registrationTime = new Date(visitor.created_at).toLocaleString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-                const row = `
-                    <tr>
-                        <td><strong>${formattedId}</strong></td>
-                        <td>${visitor.name}</td>
-                        <td>${registrationTime}</td>
-                    </tr>
+                const row = document.createElement('tr'); // استخدام createElement أكثر أماناً
+                row.innerHTML = `
+                    <td><strong>${formattedId}</strong></td>
+                    <td>${visitor.name}</td>
+                    <td>${registrationTime}</td>
                 `;
-                visitorsTableBody.innerHTML += row;
+                visitorsTableBody.appendChild(row);
             });
         }
 
@@ -62,7 +65,6 @@ async function loadAndProcessData() {
         const chartLabels = [];
         const chartData = [];
         for (let i = 0; i < 24; i++) {
-            // تنسيق الساعة لعرضها بشكل جميل (e.g., "08:00 ص")
             const hourLabel = new Date(0, 0, 0, i).toLocaleTimeString('ar-SA', { hour: '2-digit', minute:'2-digit', hour12: true });
             chartLabels.push(hourLabel);
             chartData.push(visitsByHour[i] || 0); // إذا لم يوجد زوار في ساعة معينة، نضع 0
@@ -118,5 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeChart();      // 1. جهز الرسم البياني الفارغ
     loadAndProcessData();   // 2. املأه بالبيانات لأول مرة
     setInterval(loadAndProcessData, 30000); // 3. قم بتحديث البيانات كل 30 ثانية
-    currentYearElement.textContent = new Date().getFullYear(); // تحديث سنة الحقوق
+    
+    // تأكد من وجود العنصر قبل تحديثه لتجنب الأخطاء
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
 });
