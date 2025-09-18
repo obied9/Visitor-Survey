@@ -22,7 +22,7 @@ html, body {
 }
 
 body {
-    background-image: url('background.jpeg'); /* تأكد من وضع صورة خلفية مناسبة بهذا المسار */
+    background-image: url('background.jpg'); /* تأكد من وضع صورة خلفية مناسبة بهذا المسار */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
